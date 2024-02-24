@@ -1,7 +1,7 @@
 import mongoose, {Schema} from "mongoose";
 
 const reelSchema = new Schema({
-    title:{
+    caption:{
         type: String,
         required: true
     },

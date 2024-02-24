@@ -65,7 +65,13 @@ const userSchema = new Schema({
     following: [{
         type: Schema.Types.ObjectId,
         ref: "User"
-    }]
+    }],
+    conversation:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Message"
+        }
+    ]
 
 }, {
     timestamps: true
