@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-
 const userSchema = new Schema({
 
     fullName:{
@@ -58,7 +57,15 @@ const userSchema = new Schema({
     isVerified:{
         type: Boolean,
         default:false
-    }
+    },
+    followers:[{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    following: [{
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    }]
 
 }, {
     timestamps: true
