@@ -106,4 +106,19 @@ const refreshAccessToken = AsyncHandler(async (req, res)=>{
         throw new ApiError(401, error?.message || "Invalid refresh token");
     }
 }); 
-export {register, login, logout, refreshAccessToken}
+
+const update = AsyncHandler(async (req, res)=>{
+    const {dateOfBirth, fullName, bio} = req.body;
+    if(!dateOfBirth && !fullName && !bio) throw new ApiError(400, "Nothing to update.");
+
+    const user = await User.findByIdAndUpdate(req.user?._id, {
+        $set:{
+            dateOfBirth,
+            fullName,
+            bio
+        }
+    }, {new: true}).select("-password");
+
+    res.status(200).json(new ApiResponse(200, user, "Updated successfully"));
+});
+export {register, login, logout, refreshAccessToken, update}
