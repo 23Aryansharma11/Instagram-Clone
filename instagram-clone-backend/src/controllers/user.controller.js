@@ -138,5 +138,29 @@ const updatePassword = AsyncHandler(async (req, res)=>{
 
 const getUser = AsyncHandler(async (req, res)=>{
     return res.status(200).json(new ApiResponse(200, req.user, "User details fetched successfully"));
-})
-export {register, login, logout, refreshAccessToken, update, updatePassword, getUser}
+});
+
+const updateAvatar = AsyncHandler(async (req, res)=>{
+    const oldAvatarUrl = User.findById(req.user._id).select("avatar");
+    const newAvatarLocalPath = req.file?.path;
+    if(!newAvatarLocalPath) throw new ApiError(400, "Avatar file is missing.");
+
+    const avatar = await uploadToCloud(newAvatarLocalPath);
+    if(!avatar.url) throw new ApiError(400, "Failed to upload file.");
+
+    const user = await User.findByIdAndUpdate(req.user?._id, {
+        $set:{
+            avatar: avatar.url
+        }
+    },{
+        new: true
+    }).select("-password -refreshToken");
+    
+    await deleteFromCloud(oldAvatarUrl);
+    res.status(200).json(new ApiResponse(200, user, "Avatar updated."));
+});
+
+const deleteUserProfile = AsyncHandler(async (req, res)=>{
+
+});
+export {register, login, logout, refreshAccessToken, update, updatePassword, getUser, updateAvatar}
