@@ -2,20 +2,21 @@ import {v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    cloud_name: String(process.env.CLOUDINARY_CLOUD_NAME),
+    api_key: String(process.env.CLOUDINARY_API_KEY),
+    api_secret: String(process.env.CLOUDINARY_API_SECRET)
 });
 
 //Upload and delete
 const uploadToCloud = async (localFilePath)=>{
     try {
-        const result = await cloudinary.uploader.upload(localFilePath,{
-            resource_type: "auto"
+        if(!localFilePath) return null
+        
+        const response = await cloudinary.uploader.upload(localFilePath,{
+            resource_type:"auto"
         });
-        fs.unlinkSync(localFilePath);
-
-        return result
+         fs.unlinkSync(localFilePath)
+        return response;
 
     } catch (error) {
         console.log("Unable to post to the  cloudinary: "+ error);

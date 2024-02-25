@@ -5,9 +5,11 @@ const AsyncHandler=(func)=> async(req, res, next)=>{
     } catch (error) {
 
         res.status(error.code || 500).json({
-            success: flase,
+            success: false,
             message: error.message
         });
 
     }
 }
+
+export default AsyncHandler;
