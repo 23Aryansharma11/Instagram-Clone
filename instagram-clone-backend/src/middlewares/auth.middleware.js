@@ -1,7 +1,7 @@
-import User from "../models/user.model";
-import AsyncHandler from "../Utils/AsyncHandler";
+import User from "../models/user.model.js";
+import AsyncHandler from "../Utils/AsyncHandler.js";
 import jwt from "jsonwebtoken";
-import ApiError from "../Utils/ApiError";
+import ApiError from "../Utils/ApiError.js";
 
 export const verifyJwt = AsyncHandler(async(req, res, next)=>{
     try {
@@ -18,3 +18,5 @@ export const verifyJwt = AsyncHandler(async(req, res, next)=>{
         throw new ApiError(401, error?.message || "Auth failed");
     }
 });
+
+export default verifyJwt
